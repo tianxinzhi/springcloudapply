@@ -1,0 +1,36 @@
+#暴露所有url
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+server:
+  port: 9000
+spring:
+  application:
+    name: zuul
+eureka:
+  instance:
+    instance-id: zuul
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka,http://localhost:8762/eureka
+zuul:
+  host:
+    connect-timeout-millis: 15000 #HTTP连接超时要比Hystrix的大
+    socket-timeout-millis: 60000   #socket超时
+##  prefix: /api   # 访问网关路径的前缀（在映射路径的前面，一般用于区别开发的版本）
+#  routes:
+#    myOrder:       # 随意写的区分不同映射服务器的名称（自定义路由）
+#      stripPrefix: false
+#      path: /order/**    # 自定义映射服务器路径的名称（相当于key，外部访问这个地址会映射到下面的service-id这个value值。然后从eureka服务列表找到对应服务名称，进而负载均衡的请求一个服务器）
+#      service-id: order     # eureka注册中心中要映射的服务名称，因为是双层map结构，所以可以实现负载均衡和高可用
+#    myproduct:
+#      path: /product/**
+#      service-id: product    # 映射服务器名称简单的使用上面的
+#      stripPrefix: false
+  #  因为zuul是整合ribbon和hystrix的另一个客户端，所以我们需要自己导入spring-retry坐标，并且开启服务
+#  retryable: true
+#  host:
+  # 这是表示某一个服务不允许代理，上面配置的是需要代理的
+#  ignored-services:
